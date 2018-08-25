@@ -1,5 +1,10 @@
 `melt` is a command-line utility for working with [Twitter snowflake](https://github.com/twitter/snowflake/blob/b3f6a3c6ca8e1b6847baa6ff42bf72201e2c2231/README.mkd) identifiers. It has built-in support for both Twitter's and Discord's epochs, and also allows specifying custom epochs to work with other implementations.
 
+# Dependencies
+
+* Python 3.6
+* [snowflake.py](http://github.com/fenhl/python-snowflake)
+
 # Usage
 
 By default, `melt` takes snowflakes from stdin, one per line, and converts them into UNIX timestamps with milliseconds. Snowflakes can also be passed as command-line arguments.
