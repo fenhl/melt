@@ -7,8 +7,8 @@ import itertools
 import snowflake
 
 EPOCHS = {
-    'discord': 1420070400000,
-    'twitter': 1288834974657
+    'discord': 1420070400,
+    'twitter': 1288834974.657
 }
 
 class CommandLineArgs:
@@ -55,7 +55,7 @@ class CommandLineArgs:
         if isinstance(value, str) and value.lower() in EPOCHS:
             self._epoch = EPOCHS[value.lower()]
         else:
-            self._epoch = int(value)
+            self._epoch = float(value)
 
 if __name__ == '__main__':
     args = CommandLineArgs()
@@ -63,6 +63,6 @@ if __name__ == '__main__':
     if not sys.stdin.isatty():
         flakes = itertools.chain(flakes, map(lambda line: int(line.strip()), sys.stdin))
     for flake in flakes:
-        timestamp, data_center, worker, sequence = snowflake.melt(flake, twepoch=args.epoch)
+        timestamp, data_center, worker, sequence = snowflake.melt(flake, twepoch=args.epoch * 1000)
         timestamp = datetime.datetime.fromtimestamp(timestamp / 1000)
         print(timestamp.timestamp())
