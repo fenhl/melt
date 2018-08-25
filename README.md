@@ -9,6 +9,13 @@ $ echo 844882040566702080 | melt
 1490270550.277
 ```
 
+The `--format` (or `-f`) flag can be used to modify the output format, as defined in [Python's `datetime` module](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior).
+
+```sh
+$ echo 844882040566702080 | melt -f '%Y-%m-%d %H:%M:%S'
+2017-03-23 12:02:30
+```
+
 The `--epoch` (or `-e`) flag can be used to change the epoch from Twitter's default to Discord's. A different epoch, given as a UNIX timestamp, may also be specified.
 
 ```sh

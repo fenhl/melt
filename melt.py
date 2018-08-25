@@ -15,6 +15,7 @@ class CommandLineArgs:
     def __init__(self, args=sys.argv[1:]):
         self._epoch = EPOCHS['twitter']
         self.flakes = []
+        self.format = None
         self.parse_args(args)
 
     def parse_args(self, args):
@@ -23,12 +24,19 @@ class CommandLineArgs:
             if mode == 'epoch':
                 self.epoch = arg
                 mode = None
+            elif mode == 'format':
+                self.format = arg
+                mode = None
             elif arg.startswith('-'):
                 if arg.startswith('--'):
                     if arg == '--epoch':
                         mode = 'epoch'
                     elif arg.startswith('--epoch='):
                         self.epoch = arg[len('--epoch='):]
+                    elif arg == '--format':
+                        mode = 'format'
+                    elif arg.startswith('--format='):
+                        self.format = arg[len('--format='):]
                     else:
                         raise ValueError(f'Unrecognized flag: {arg}')
                 else:
@@ -40,6 +48,12 @@ class CommandLineArgs:
                                 self.epoch = arg[i + 1:]
                             else:
                                 mode = 'epoch'
+                            break
+                        elif short_flag == 'f':
+                            if len(arg) > i + 1:
+                                self.format = arg[i + 1:]
+                            else:
+                                mode = 'format'
                             break
                         else:
                             raise ValueError(f'Unrecognized flag: -{short_flag}')
@@ -65,4 +79,7 @@ if __name__ == '__main__':
     for flake in flakes:
         timestamp, data_center, worker, sequence = snowflake.melt(flake, twepoch=args.epoch * 1000)
         timestamp = datetime.datetime.fromtimestamp(timestamp / 1000)
-        print(timestamp.timestamp())
+        if args.format is None:
+            print(timestamp.timestamp())
+        else:
+            print(f'{timestamp:{args.format}}')
