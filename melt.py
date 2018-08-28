@@ -71,15 +71,22 @@ class CommandLineArgs:
         else:
             self._epoch = float(value)
 
+def format_melt(flake, epoch=EPOCHS['twitter'], format_str=None):
+    timestamp, data_center, worker, sequence = snowflake.melt(flake, twepoch=epoch * 1000)
+    timestamp = datetime.datetime.fromtimestamp(timestamp / 1000)
+    if format_str is None:
+        return str(timestamp.timestamp())
+    else:
+        format_str = '%%'.join(
+            part.replace('%^d', str(data_center)).replace('%^w', str(worker)).replace('%^s', str(sequence))
+            for part in format_str.split('%%')
+        )
+        return f'{timestamp:{format_str}}'
+
 if __name__ == '__main__':
     args = CommandLineArgs()
     flakes = args.flakes
     if not sys.stdin.isatty():
         flakes = itertools.chain(flakes, map(lambda line: int(line.strip()), sys.stdin))
     for flake in flakes:
-        timestamp, data_center, worker, sequence = snowflake.melt(flake, twepoch=args.epoch * 1000)
-        timestamp = datetime.datetime.fromtimestamp(timestamp / 1000)
-        if args.format is None:
-            print(timestamp.timestamp())
-        else:
-            print(f'{timestamp:{args.format}}')
+        print(format_melt(flake, args.epoch, args.format))

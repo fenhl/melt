@@ -14,7 +14,7 @@ $ echo 844882040566702080 | melt
 1490270550.277
 ```
 
-The `--format` (or `-f`) flag can be used to modify the output format, as defined in [Python's `datetime` module](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior).
+The `--format` (or `-f`) flag can be used to modify the output format, as defined in [Python's `datetime` module](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior). Additionally, the formatting directives `%^d`, `%^w`, and `%^s` may be used to include the data center ID, worker ID, or sequence number, respectively.
 
 ```sh
 $ echo 844882040566702080 | melt -f '%Y-%m-%d %H:%M:%S'
