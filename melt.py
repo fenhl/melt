@@ -43,7 +43,9 @@ class CommandLineArgs:
                     for i, short_flag in enumerate(arg):
                         if i == 0:
                             continue
-                        if short_flag == 'e':
+                        if short_flag == 'H':
+                            self.format = '%Y-%m-%d %H:%M:%S'
+                        elif short_flag == 'e':
                             if len(arg) > i + 1:
                                 self.epoch = arg[i + 1:]
                             else:

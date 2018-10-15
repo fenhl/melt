@@ -14,11 +14,11 @@ $ echo 844882040566702080 | melt
 1490270550.277
 ```
 
-The `--format` (or `-f`) flag can be used to modify the output format, as defined in [Python's `datetime` module](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior). Additionally, the formatting directives `%^d`, `%^w`, and `%^s` may be used to include the data center ID, worker ID, or sequence number, respectively.
+The `--format` (or `-f`) flag can be used to modify the output format, as defined in [Python's `datetime` module](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior). Additionally, the formatting directives `%^d`, `%^w`, and `%^s` may be used to include the data center ID, worker ID, or sequence number, respectively. The flag `-H` is a shorthand and specifies a format of `%Y-%m-%d %H:%M:%S`.
 
 ```sh
-$ echo 844882040566702080 | melt -f '%Y-%m-%d %H:%M:%S'
-2017-03-23 12:02:30
+$ echo 844882040566702080 | melt -f '%d.%m.%Y %H:%M:%S'
+23.03.2017 12:02:30
 ```
 
 The `--epoch` (or `-e`) flag can be used to change the epoch from Twitter's default to Discord's. A different epoch, given as a UNIX timestamp, may also be specified.
