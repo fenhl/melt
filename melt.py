@@ -4,6 +4,7 @@ import sys
 
 import datetime
 import itertools
+import pytz
 import snowflake
 
 EPOCHS = {
@@ -16,6 +17,8 @@ class CommandLineArgs:
         self._epoch = EPOCHS['twitter']
         self.flakes = []
         self.format = None
+        self.help = False
+        self.timezone = pytz.utc
         self.parse_args(args)
 
     def parse_args(self, args):
@@ -27,6 +30,9 @@ class CommandLineArgs:
             elif mode == 'format':
                 self.format = arg
                 mode = None
+            elif mode == 'timezone':
+                self.timezone = pytz.timezone(arg)
+                mode = None
             elif arg.startswith('-'):
                 if arg.startswith('--'):
                     if arg == '--epoch':
@@ -37,6 +43,12 @@ class CommandLineArgs:
                         mode = 'format'
                     elif arg.startswith('--format='):
                         self.format = arg[len('--format='):]
+                    elif arg == '--help':
+                        self.help = True
+                    elif arg == '--timezone':
+                        mode = 'timezone'
+                    elif arg.startswith('--timezone='):
+                        self.timezone = pytz.timezone(arg[len('--timezone='):])
                     else:
                         raise ValueError(f'Unrecognized flag: {arg}')
                 else:
@@ -57,6 +69,14 @@ class CommandLineArgs:
                             else:
                                 mode = 'format'
                             break
+                        elif short_flag == 'h':
+                            self.help = True
+                        elif short_flag == 'z':
+                            if len(arg) > i + 1:
+                                self.timezone = pytz.timezone(arg[i + 1:])
+                            else:
+                                mode = 'timezone'
+                            break
                         else:
                             raise ValueError(f'Unrecognized flag: -{short_flag}')
             else:
@@ -73,9 +93,9 @@ class CommandLineArgs:
         else:
             self._epoch = float(value)
 
-def format_melt(flake, epoch=EPOCHS['twitter'], format_str=None):
+def format_melt(flake, epoch=EPOCHS['twitter'], format_str=None, timezone=pytz.utc):
     timestamp, data_center, worker, sequence = snowflake.melt(flake, twepoch=epoch * 1000)
-    timestamp = datetime.datetime.fromtimestamp(timestamp / 1000)
+    timestamp = pytz.utc.localize(datetime.datetime.fromtimestamp(timestamp / 1000)).astimezone(timezone)
     if format_str is None:
         return str(timestamp.timestamp())
     else:
@@ -87,8 +107,11 @@ def format_melt(flake, epoch=EPOCHS['twitter'], format_str=None):
 
 if __name__ == '__main__':
     args = CommandLineArgs()
+    if args.help:
+        print('[ ** ] please see https://github.com/fenhl/melt/blob/master/README.md for usage instructions')
+        sys.exit()
     flakes = args.flakes
     if not sys.stdin.isatty():
         flakes = itertools.chain(flakes, map(lambda line: int(line.strip()), sys.stdin))
     for flake in flakes:
-        print(format_melt(flake, args.epoch, args.format))
+        print(format_melt(flake, args.epoch, args.format, args.timezone))
