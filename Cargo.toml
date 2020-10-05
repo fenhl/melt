@@ -1,0 +1,26 @@
+[package]
+name = "melt"
+version = "2.0.0"
+authors = ["Fenhl <fenhl@fenhl.net>"]
+edition = "2018"
+repository = "https://github.com/fenhl/melt"
+
+[dependencies]
+atty = "0.2"
+chrono = "0.4"
+chrono-tz = "0.5"
+derive_more = "0.99"
+futures = "0.3"
+itertools = "0.9"
+paw = "1"
+
+[dependencies.structopt]
+version = "0.3"
+features = ["paw"]
+
+[dependencies.tokio]
+version = "0.2"
+features = ["io-std", "io-util", "stream"]
+
+[dependencies.wheel]
+path = "/Users/fenhl/Desktop/wheel/crate/wheel" #TODO publish on GitHub (or crates.io?)
