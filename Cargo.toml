@@ -23,4 +23,5 @@ version = "0.2"
 features = ["io-std", "io-util", "stream"]
 
 [dependencies.wheel]
-path = "/Users/fenhl/Desktop/wheel/crate/wheel" #TODO publish on GitHub (or crates.io?)
+git = "https://github.com/fenhl/wheel" #TODO publish on crates.io?
+branch = "main"
