@@ -31,7 +31,7 @@ $ echo 844882040566702080 | melt -f '%d.%m.%Y %H:%M:%S'
 23.03.2017 12:02:30
 ```
 
-The `--timezone` (of `-z`) flag can be used to change the timezone in which formatted times are displayed. The timezone must be given as a name from the Olson timezone database. By default, UTC is used. This flag has no effect on UNIX timestamps (i.e. when none of `-f`, `--format`, `-H` are specified), which are always in UTC.
+The `--timezone` (or `-z`) flag can be used to change the timezone in which formatted times are displayed. The timezone must be given as a name from the Olson timezone database. By default, UTC is used. This flag has no effect on UNIX timestamps (i.e. when none of `-f`, `--format`, `-H` are specified), which are always in UTC.
 
 ```sh
 $ echo 844882040566702080 | melt -f '%d.%m.%Y %H:%M:%S' -z Europe/Berlin
