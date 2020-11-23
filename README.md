@@ -12,7 +12,7 @@
 4. In the command line, run the following command. Depending on your computer, this may take a while.
 
     ```
-    cargo install --git=https://github.com/fenhl/melt
+    cargo install --git=https://github.com/fenhl/melt --branch=main
     ```
 
 # Usage
