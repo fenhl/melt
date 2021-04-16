@@ -1,6 +1,6 @@
 [package]
 name = "melt"
-version = "2.0.0"
+version = "2.0.1"
 authors = ["Fenhl <fenhl@fenhl.net>"]
 edition = "2018"
 repository = "https://github.com/fenhl/melt"
@@ -9,18 +9,26 @@ repository = "https://github.com/fenhl/melt"
 atty = "0.2"
 chrono = "0.4"
 chrono-tz = "0.5"
-derive_more = "0.99"
 futures = "0.3"
-itertools = "0.9"
+itertools = "0.10"
 paw = "1"
+
+[dependencies.derive_more]
+version = "0.99"
+default-features = false
+features = ["from"]
 
 [dependencies.structopt]
 version = "0.3"
 features = ["paw"]
 
 [dependencies.tokio]
-version = "0.2"
-features = ["io-std", "io-util", "stream"]
+version = "1"
+features = ["io-std", "io-util"]
+
+[dependencies.tokio-stream]
+version = "0.1"
+features = ["io-util"]
 
 [dependencies.wheel]
 git = "https://github.com/fenhl/wheel" #TODO publish on crates.io?

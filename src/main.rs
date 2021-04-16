@@ -4,6 +4,7 @@ use {
     std::{
         convert::TryInto as _,
         fmt,
+        io,
         num::ParseIntError,
     },
     chrono::{
@@ -12,16 +13,15 @@ use {
     },
     chrono_tz::Tz,
     derive_more::From,
-    futures::prelude::*,
+    futures::stream::TryStreamExt as _,
     itertools::Itertools as _,
     structopt::StructOpt,
-    tokio::{
-        io::{
-            BufReader,
-            stdin,
-        },
-        prelude::*,
+    tokio::io::{
+        AsyncBufReadExt as _,
+        BufReader,
+        stdin,
     },
+    tokio_stream::wrappers::LinesStream,
 };
 
 const DATACENTER_ID_BITS: u8 = 5;
@@ -108,8 +108,7 @@ async fn main(args: Arguments) -> Result<(), Error> {
     let mut flakes = args.flakes;
     if !atty::is(atty::Stream::Stdin) {
         flakes.extend(
-            BufReader::new(stdin())
-                .lines()
+            LinesStream::new(BufReader::new(stdin()).lines())
                 .err_into()
                 .and_then(|line| async move { line.trim().parse::<u64>().map_err(Error::from) })
                 .try_collect::<Vec<_>>().await?
