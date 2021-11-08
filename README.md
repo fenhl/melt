@@ -25,30 +25,51 @@ A snowflake consists of 4 pieces of information: Timestamp, data center ID, work
 
 # Usage
 
-By default, `melt` takes Twitter snowflakes from stdin, one per line, and converts them into UNIX timestamps with milliseconds. Snowflakes can also be passed as command-line arguments.
+By default, `melt` takes Twitter snowflakes from stdin, one per line, and converts them into UNIX timestamps with milliseconds:
 
 ```sh
 $ echo 1212702693736767490 | melt
 1577965827.770
 ```
 
-The `--format` (or `-f`) flag can be used to modify the output format, as [defined by `chrono`](https://docs.rs/chrono/0.4/chrono/format/strftime/index.html). Additionally, the formatting directives `%^d`, `%^w`, and `%^s` may be used to include the data center ID, worker ID, or sequence number, respectively. The flag `-H` is a shorthand and specifies a format of `%Y-%m-%d %H:%M:%S`.
+Snowflakes can also be passed as command-line arguments:
+
+```sh
+$ melt 1212702693736767490
+1577965827.770
+```
+
+The `--format` (or `-f`) flag can be used to modify the output format, as [defined by `chrono`](https://docs.rs/chrono/0.4/chrono/format/strftime/index.html). Additionally, the formatting directives `%^d`, `%^w`, and `%^s` may be used to include the data center ID, worker ID, or sequence number, respectively.
 
 ```sh
 $ echo 1212702693736767490 | melt -f '%d.%m.%Y %H:%M:%S'
 02.01.2020 11:50:27
 ```
 
-The `--timezone` (or `-z`) flag can be used to change the timezone in which formatted times are displayed. The timezone must be given as a name from the Olson timezone database. By default, UTC is used. This flag has no effect on UNIX timestamps (i.e. when none of `-f`, `--format`, `-H` are specified), which are always in UTC.
+The flag `-H` is a shorthand and specifies a format of `%Y-%m-%d %H:%M:%S`:
+
+```sh
+$ echo 1212702693736767490 | melt -H
+2020-01-02 11:50:27
+```
+
+The `--timezone` (or `-z`) flag can be used to change the timezone in which formatted times are displayed. The timezone must be given as a name from [the Olson timezone database](https://en.wikipedia.org/wiki/Tz_database). By default, UTC is used. This flag has no effect on UNIX timestamps (i.e. when none of `-f`, `--format`, `-H` are specified), which are always in UTC.
 
 ```sh
 $ echo 1212702693736767490 | melt -f '%d.%m.%Y %H:%M:%S' -z Europe/Berlin
 02.01.2020 12:50:27
 ```
 
-The `--epoch` (or `-e`) flag can be used to change the epoch from Twitter's default to Discord's. A different epoch, given as a UNIX timestamp, may also be specified.
+The `--epoch` (or `-e`) flag can be used to change the epoch from Twitter's default to Discord's:
 
 ```sh
 $ echo 86841168427495424 | melt -e discord
 1309539522.641
+```
+
+A different epoch, given as a UNIX timestamp, may also be specified:
+
+```sh
+$ echo 0 | melt -e 0
+0
 ```
