@@ -3,7 +3,6 @@
 use {
     std::{
         convert::TryInto as _,
-        fmt,
         io,
         num::ParseIntError,
     },
@@ -12,10 +11,8 @@ use {
         prelude::*,
     },
     chrono_tz::Tz,
-    derive_more::From,
     futures::stream::TryStreamExt as _,
     itertools::Itertools as _,
-    structopt::StructOpt,
     tokio::io::{
         AsyncBufReadExt as _,
         BufReader,
@@ -31,35 +28,26 @@ const MAX_DATACENTER_ID: u64 = 1 << DATACENTER_ID_BITS;
 const MAX_WORKER_ID: u64 = 1 << WORKER_ID_BITS;
 const MAX_SEQUENCE_ID: u64 = 1 << SEQUENCE_ID_BITS;
 
-#[derive(From)]
+#[derive(Debug, thiserror::Error)]
 enum Error {
-    Io(io::Error),
-    ParseInt(ParseIntError),
+    #[error(transparent)] Io(#[from] io::Error),
+    #[error(transparent)] ParseInt(#[from] ParseIntError),
 }
 
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Error::Io(e) => write!(f, "I/O error: {}", e),
-            Error::ParseInt(e) => e.fmt(f),
-        }
-    }
-}
-
-#[derive(StructOpt)]
+#[derive(clap::Parser)]
 struct Arguments {
     /// The epoch on which the snowflakes are based. Can be `twitter` `discord`, or a UNIX timestamp.
     #[structopt(short, long, default_value = "twitter", parse(try_from_str = parse_epoch))]
     epoch: DateTime<Utc>,
     /// Format each timestamp like this, as defined at <https://docs.rs/chrono/0.4/chrono/format/strftime/index.html>. Additionally, %^d, %^w, and %^s can be used to insert the datacenter, worker, and sequence ID, respectively. Defaults to a UNIX timestamp with fractional part.
-    #[structopt(short, long, default_value = "%s%.f", default_value_if("human", None, "%Y-%m-%d %H:%M:%S"))]
+    #[structopt(short, long, default_value = "%s%.f", default_value_if("human", None, Some("%Y-%m-%d %H:%M:%S")))]
     format: String,
     /// Show the timestamps in a human-readable format. Short for `--format="%Y-%m-%d %H:%M:%S"`.
-    #[structopt(short = "H")]
+    #[structopt(short = 'H')]
     #[allow(unused)] // used in default_value_if of format arg
     human: bool,
     /// The timezone in which the timestamps will be shown.
-    #[structopt(short = "z", long, default_value = "Etc/UTC")]
+    #[structopt(short = 'z', long, default_value = "Etc/UTC")]
     timezone: Tz,
     /// An optional list of snowflakes to melt. Snowflakes can also be piped into `melt`, separated by line breaks.
     flakes: Vec<u64>,
