@@ -73,3 +73,12 @@ A different epoch, given as a UNIX timestamp, may also be specified:
 $ echo 0 | melt -e 0
 0
 ```
+
+The `--discord-format` (or `-d`) flag can be used to format the times using [Discord's timestamp syntax](https://discord.com/developers/docs/reference#message-formatting), which can be pasted into a Discord message to get human-readable timestamps. Possible values are `d` (or  `short-date`), `D` (or `long-date`), `t` (or `short-time`), `T` (or `long-time`), `f` (or `short-date-time`), `F` (or `long-date-time`), and `R` (or `relative`). Using this flag implies `--epoch=discord` and disables the `--timezone` parameter, since Discord will display the times in the system timezone of the viewer.
+
+```sh
+$ echo 86841168427495424 | melt -dF
+<t:1440774947:F>
+```
+
+(When sent as a message, my Discord app displays the above as `Friday, 28 August 2015 15:15`. The exact format may vary depending on your locale.)
