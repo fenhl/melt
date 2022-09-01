@@ -5,6 +5,10 @@ authors = ["Fenhl <fenhl@fenhl.net>"]
 edition = "2021"
 repository = "https://github.com/fenhl/melt"
 
+[profile.release]
+lto = true
+strip = true
+
 [dependencies]
 atty = "0.2"
 chrono = "0.4"
