@@ -11,6 +11,7 @@ use {
         prelude::*,
     },
     chrono_tz::Tz,
+    clap::builder::ArgPredicate,
     futures::stream::TryStreamExt as _,
     itertools::Itertools as _,
     tokio::io::{
@@ -58,10 +59,10 @@ struct Arguments {
     #[structopt(short, long, value_enum, conflicts_with("epoch"), conflicts_with("format"), conflicts_with("human"))]
     discord_format: Option<DiscordFormat>,
     /// The epoch on which the snowflakes are based. Can be `twitter` `discord`, or a UNIX timestamp.
-    #[structopt(short, long, default_value = "twitter", default_value_if("discord-format", None, Some("discord")), parse(try_from_str = parse_epoch))]
+    #[structopt(short, long, default_value = "twitter", default_value_if("discord-format", ArgPredicate::IsPresent, Some("discord")), value_parser = parse_epoch)]
     epoch: DateTime<Utc>,
     /// Format each timestamp like this, as defined at <https://docs.rs/chrono/0.4/chrono/format/strftime/index.html>. Additionally, %^d, %^w, and %^s can be used to insert the datacenter, worker, and sequence ID, respectively. Defaults to a UNIX timestamp with fractional part.
-    #[structopt(short, long, group("allow_timezone"), default_value = "%s%.f", default_value_if("human", None, Some("%Y-%m-%d %H:%M:%S")))]
+    #[structopt(short, long, group("allow_timezone"), default_value = "%s%.f", default_value_if("human", ArgPredicate::IsPresent, Some("%Y-%m-%d %H:%M:%S")))]
     format: String,
     /// Show the timestamps in a human-readable format. Short for `--format="%Y-%m-%d %H:%M:%S"`.
     #[structopt(short = 'H', group("allow_timezone"), conflicts_with("format"))]
