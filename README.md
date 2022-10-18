@@ -15,7 +15,7 @@ A snowflake consists of 4 pieces of information: Timestamp, data center ID, work
     * On Windows, download and run [rustup-init.exe](https://win.rustup.rs/) and follow its instructions.
     * On other platforms, please see [the Rust website](https://www.rust-lang.org/tools/install) for instructions.
 3. Open a command line:
-    * On Windows, right-click the start button, then click “Windows PowerShell” or “Command Prompt”.
+    * On Windows, right-click the start button, then click “Terminal”, “Windows PowerShell”, or “Command Prompt”.
     * On other platforms, look for an app named “Terminal” or similar.
 4. In the command line, run the following command. Depending on your computer, this may take a while.
 
