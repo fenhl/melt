@@ -1,6 +1,6 @@
 [package]
 name = "melt"
-version = "2.1.1"
+version = "2.1.2"
 authors = ["Fenhl <fenhl@fenhl.net>"]
 edition = "2021"
 repository = "https://github.com/fenhl/melt"
@@ -12,7 +12,7 @@ strip = true
 [dependencies]
 atty = "0.2"
 chrono = "0.4"
-chrono-tz = "0.6"
+chrono-tz = "0.8"
 futures = "0.3"
 itertools = "0.10"
 paw = "1"
