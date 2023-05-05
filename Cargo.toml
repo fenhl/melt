@@ -1,6 +1,6 @@
 [package]
 name = "melt"
-version = "2.1.3"
+version = "2.1.4"
 authors = ["Fenhl <fenhl@fenhl.net>"]
 edition = "2021"
 repository = "https://github.com/fenhl/melt"
@@ -12,7 +12,6 @@ strip = true
 [dependencies]
 is-terminal = "0.4"
 chrono-tz = "0.8"
-futures = "0.3"
 itertools = "0.10"
 thiserror = "1"
 
@@ -25,14 +24,7 @@ features = ["std"]
 version = "4"
 features = ["derive"]
 
-[dependencies.tokio]
-version = "1"
-features = ["io-std", "io-util"]
-
-[dependencies.tokio-stream]
-version = "0.1"
-features = ["io-util"]
-
 [dependencies.wheel]
 git = "https://github.com/fenhl/wheel" #TODO publish on crates.io?
 branch = "main"
+default-features = false

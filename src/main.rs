@@ -4,7 +4,12 @@
 use {
     std::{
         convert::TryInto as _,
-        io,
+        io::{
+            self,
+            BufReader,
+            prelude::*,
+            stdin,
+        },
         num::ParseIntError,
     },
     chrono::{
@@ -13,15 +18,8 @@ use {
     },
     chrono_tz::Tz,
     clap::builder::ArgPredicate,
-    futures::stream::TryStreamExt as _,
     is_terminal::IsTerminal as _,
     itertools::Itertools as _,
-    tokio::io::{
-        AsyncBufReadExt as _,
-        BufReader,
-        stdin,
-    },
-    tokio_stream::wrappers::LinesStream,
 };
 
 const DATACENTER_ID_BITS: u8 = 5;
@@ -116,7 +114,7 @@ fn parse_epoch(epoch_str: &str) -> chrono::ParseResult<DateTime<Utc>> {
 }
 
 #[wheel::main]
-async fn main(args: Arguments) -> Result<(), Error> {
+fn main(args: Arguments) -> Result<(), Error> {
     let format = match args.discord_format {
         Some(DiscordFormat::ShortDate) => "<t:%s:d>",
         Some(DiscordFormat::LongDate) => "<t:%s:D>",
@@ -127,20 +125,17 @@ async fn main(args: Arguments) -> Result<(), Error> {
         Some(DiscordFormat::Relative) => "<t:%s:R>",
         None => &args.format,
     };
-    let mut flakes = args.flakes;
+    for flake in args.flakes {
+        println!("{}", SnowflakeParts::melt(flake, args.epoch).format(format, args.timezone));
+    }
     {
         let stdin = stdin();
         if stdin.is_terminal() {
-            flakes.extend(
-                LinesStream::new(BufReader::new(stdin).lines())
-                    .err_into()
-                    .and_then(|line| async move { line.trim().parse::<u64>().map_err(Error::from) })
-                    .try_collect::<Vec<_>>().await?
-            );
+            for line in BufReader::new(stdin).lines() {
+                let flake = line?.trim().parse::<u64>()?;
+                println!("{}", SnowflakeParts::melt(flake, args.epoch).format(format, args.timezone));
+            }
         }
-    }
-    for flake in flakes {
-        println!("{}", SnowflakeParts::melt(flake, args.epoch).format(format, args.timezone))
     }
     Ok(())
 }
