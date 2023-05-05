@@ -1,4 +1,5 @@
-#![deny(rust_2018_idioms, unused, unused_import_braces, unused_lifetimes, unused_qualifications, warnings)]
+#![deny(rust_2018_idioms, unused, unused_crate_dependencies, unused_import_braces, unused_lifetimes, unused_qualifications, warnings)]
+#![forbid(unsafe_code)]
 
 use {
     std::{
@@ -13,6 +14,7 @@ use {
     chrono_tz::Tz,
     clap::builder::ArgPredicate,
     futures::stream::TryStreamExt as _,
+    is_terminal::IsTerminal as _,
     itertools::Itertools as _,
     tokio::io::{
         AsyncBufReadExt as _,
@@ -126,13 +128,16 @@ async fn main(args: Arguments) -> Result<(), Error> {
         None => &args.format,
     };
     let mut flakes = args.flakes;
-    if !atty::is(atty::Stream::Stdin) {
-        flakes.extend(
-            LinesStream::new(BufReader::new(stdin()).lines())
-                .err_into()
-                .and_then(|line| async move { line.trim().parse::<u64>().map_err(Error::from) })
-                .try_collect::<Vec<_>>().await?
-        );
+    {
+        let stdin = stdin();
+        if stdin.is_terminal() {
+            flakes.extend(
+                LinesStream::new(BufReader::new(stdin).lines())
+                    .err_into()
+                    .and_then(|line| async move { line.trim().parse::<u64>().map_err(Error::from) })
+                    .try_collect::<Vec<_>>().await?
+            );
+        }
     }
     for flake in flakes {
         println!("{}", SnowflakeParts::melt(flake, args.epoch).format(format, args.timezone))
