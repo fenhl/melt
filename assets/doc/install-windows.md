@@ -2,6 +2,7 @@
 2. Navigate to System → About
 3. In the “Device specifications” section, check what the second half of the “System type” says, and download the appropriate file:
 
+    * [ARM-based processor](https://github.com/fenhl/melt/releases/latest/download/melt-arm.exe)
     * [x86-based processor](https://github.com/fenhl/melt/releases/latest/download/melt-x86.exe)
     * [x64-based processor](https://github.com/fenhl/melt/releases/latest/download/melt-x64.exe)
 
