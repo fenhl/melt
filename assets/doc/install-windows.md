@@ -1,3 +1,5 @@
+# Installing `melt` on Windows
+
 1. Press <kbd>Windows</kbd><kbd>I</kbd> open the Settings app
 2. Navigate to System → About
 3. In the “Device specifications” section, check what the second half of the “System type” says, and download the appropriate file:
