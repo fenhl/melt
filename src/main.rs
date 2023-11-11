@@ -109,7 +109,7 @@ fn parse_epoch(epoch_str: &str) -> chrono::ParseResult<DateTime<Utc>> {
     Ok(match epoch_str {
         "twitter" => Utc.timestamp_millis_opt(1288834974657).single().expect("wrong hardcoded datetime"),
         "discord" => Utc.timestamp_opt(1420070400, 0).single().expect("wrong hardcoded datetime"),
-        _ => Utc.datetime_from_str(epoch_str, "%s%.f")?
+        _ => NaiveDateTime::parse_from_str(epoch_str, "%s%.f")?.and_utc(),
     })
 }
 
@@ -130,7 +130,7 @@ fn main(args: Arguments) -> Result<(), Error> {
     }
     {
         let stdin = stdin();
-        if stdin.is_terminal() {
+        if !stdin.is_terminal() {
             for line in BufReader::new(stdin).lines() {
                 let flake = line?.trim().parse::<u64>()?;
                 println!("{}", SnowflakeParts::melt(flake, args.epoch).format(format, args.timezone));
