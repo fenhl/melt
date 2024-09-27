@@ -20,21 +20,10 @@ unused_qualifications = "deny"
 warnings = "deny"
 
 [dependencies]
+chrono = { version = "0.4", default-features = false, features = ["std"] }
+clap = { version = "4", features = ["derive"] }
 is-terminal = "0.4"
 chrono-tz = "0.8"
 itertools = "0.11"
 thiserror = "1"
-
-[dependencies.chrono]
-version = "0.4"
-default-features = false
-features = ["std"]
-
-[dependencies.clap]
-version = "4"
-features = ["derive"]
-
-[dependencies.wheel]
-git = "https://github.com/fenhl/wheel" #TODO publish on crates.io?
-branch = "main"
-default-features = false
+wheel = { git = "https://github.com/fenhl/wheel", branch = "main", default-features = false }
