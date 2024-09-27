@@ -9,6 +9,16 @@ repository = "https://github.com/fenhl/melt"
 lto = true
 strip = true
 
+[lints.rust]
+rust_2018_idioms = "deny"
+unsafe_code = "forbid"
+unused = "deny"
+unused_crate_dependencies = "deny"
+unused_import_braces = "deny"
+unused_lifetimes = "deny"
+unused_qualifications = "deny"
+warnings = "deny"
+
 [dependencies]
 is-terminal = "0.4"
 chrono-tz = "0.8"
