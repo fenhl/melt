@@ -1,6 +1,6 @@
 [package]
 name = "melt"
-version = "2.1.5"
+version = "2.2.0"
 authors = ["Fenhl <fenhl@fenhl.net>"]
 edition = "2024"
 repository = "https://github.com/fenhl/melt"

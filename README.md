@@ -46,6 +46,13 @@ $ echo 1212702693736767490 | melt -H
 2020-01-02 11:50:27
 ```
 
+Similarly, the flag `-T` is a shorthand and specifies a format of `%+` (the ISO 8601 / RFC 3339 date & time format):
+
+```sh
+$ echo 1212702693736767490 | melt -T
+2020-01-02T11:50:27.770+00:00
+```
+
 The `--timezone` (or `-z`) flag can be used to change the timezone in which formatted times are displayed. The timezone must be given as a name from [the Olson timezone database](https://en.wikipedia.org/wiki/Tz_database). By default, UTC is used. This flag has no effect on UNIX timestamps (i.e. when none of `-f`, `--format`, `-H` are specified), which are always in UTC.
 
 ```sh

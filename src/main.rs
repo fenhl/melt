@@ -53,18 +53,22 @@ enum DiscordFormat {
 #[derive(clap::Parser)]
 struct Arguments {
     /// Give the timestamps in a format which if included in a Discord message will be rendered according to the viewer's locale.
-    #[clap(short, long, value_enum, conflicts_with("epoch"), conflicts_with("format"), conflicts_with("human"))]
+    #[clap(short, long, value_enum, conflicts_with("epoch"), conflicts_with("format"), conflicts_with("human"), conflicts_with("iso8601"))]
     discord_format: Option<DiscordFormat>,
     /// The epoch on which the snowflakes are based. Can be `twitter` `discord`, or a UNIX timestamp.
     #[clap(short, long, default_value = "twitter", default_value_if("discord-format", ArgPredicate::IsPresent, Some("discord")), value_parser = parse_epoch)]
     epoch: DateTime<Utc>,
     /// Format each timestamp like this, as defined at <https://docs.rs/chrono/0.4/chrono/format/strftime/index.html>. Additionally, %^d, %^w, and %^s can be used to insert the datacenter, worker, and sequence ID, respectively. Defaults to a UNIX timestamp with fractional part.
-    #[clap(short, long, group("allow_timezone"), default_value = "%s%.f", default_value_if("human", ArgPredicate::IsPresent, Some("%Y-%m-%d %H:%M:%S")))]
+    #[clap(short, long, group("allow_timezone"), default_value = "%s%.f", default_value_if("human", ArgPredicate::IsPresent, Some("%Y-%m-%d %H:%M:%S")), default_value_if("iso8601", ArgPredicate::IsPresent, Some("%+")))]
     format: String,
     /// Show the timestamps in a human-readable format. Short for `--format="%Y-%m-%d %H:%M:%S"`.
-    #[clap(short = 'H', group("allow_timezone"), conflicts_with("format"))]
+    #[clap(short = 'H', group("allow_timezone"), conflicts_with("format"), conflicts_with("iso8601"))]
     #[allow(unused)] // used in default_value_if of format arg
     human: bool,
+    /// Show the timestamps in ISO 8601 / RFC 3339 format. Short for `--format="%+"`.
+    #[clap(short = 'T', group("allow_timezone"), conflicts_with("format"), conflicts_with("human"))]
+    #[allow(unused)] // used in default_value_if of format arg
+    iso8601: bool,
     /// The timezone in which the timestamps will be shown.
     #[clap(short = 'z', long, default_value = "Etc/UTC", requires("allow_timezone"))]
     timezone: Tz,
