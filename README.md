@@ -13,6 +13,7 @@ A snowflake consists of 4 pieces of information: Timestamp, data center ID, work
 Please see the install instructions for your operating system:
 
 * [Windows](https://github.com/fenhl/melt/blob/main/assets/doc/install-windows.md)
+* [NixOS](https://github.com/fenhl/melt/blob/main/assets/doc/install-nixos.md)
 
 If your operating system is not listed here, or if you would like to manage updates of `melt` using [`cargo-update`](https://crates.io/crates/cargo-update), follow [the instructions for building from source](https://github.com/fenhl/melt/blob/main/assets/doc/build.md).
 
