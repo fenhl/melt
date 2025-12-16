@@ -27,4 +27,4 @@ is-terminal = "0.4"
 chrono-tz = "0.10"
 itertools = "0.14"
 thiserror = "2"
-wheel = { git = "https://github.com/fenhl/wheel", branch = "main", default-features = false }
+wheel = { git = "https://github.com/fenhl/wheel", default-features = false }
