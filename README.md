@@ -17,6 +17,38 @@ Please see the install instructions for your operating system:
 
 If your operating system is not listed here, or if you would like to manage updates of `melt` using [`cargo-update`](https://crates.io/crates/cargo-update), follow [the instructions for building from source](https://github.com/fenhl/melt/blob/main/assets/doc/build.md).
 
+## Tab completion
+
+**Bash**
+```bash
+echo "source <(COMPLETE=bash melt)" >> ~/.bashrc
+```
+
+**Elvish**
+```elvish
+echo "eval (E:COMPLETE=elvish melt | slurp)" >> ~/.elvish/rc.elv
+```
+
+**Fish**
+```fish
+echo "COMPLETE=fish melt | source" >> ~/.config/fish/config.fish
+```
+
+**Powershell**
+```powershell
+echo '$env:COMPLETE = "powershell"; melt | Out-String | Invoke-Expression; Remove-Item Env:\COMPLETE' >> $PROFILE
+```
+Note that to execute scripts in PowerShell on Windows, including [`$PROFILE`][$Profile],
+the [execution policy][ExecutionPolicies] needs to be set to `RemoteSigned` at minimum.
+
+[$Profile]: https://learn.microsoft.com/en-us/powershell/scripting/learn/shell/creating-profiles
+[ExecutionPolicies]: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies
+
+**Zsh**
+```zsh
+echo "source <(COMPLETE=zsh melt)" >> ~/.zshrc
+```
+
 # Usage
 
 By default, `melt` takes Twitter snowflakes from stdin, one per line, and converts them into UNIX timestamps with milliseconds:
