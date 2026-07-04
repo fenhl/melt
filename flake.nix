@@ -1,9 +1,5 @@
 {
-    inputs = {
-        # a better way of using the latest stable version of nixpkgs
-        # without specifying specific release
-        nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/*.tar.gz";
-    };
+    inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/*.tar.gz";
     outputs = { self, nixpkgs }: let
         supportedSystems = [
             "aarch64-darwin"
@@ -21,11 +17,22 @@
             default = pkgs.rustPlatform.buildRustPackage {
                 pname = "melt";
                 version = manifest.version;
-                src = ./.;
                 cargoLock = {
                     allowBuiltinFetchGit = true; # allows omitting cargoLock.outputHashes
                     lockFile = ./Cargo.lock;
                 };
+                nativeBuildInputs = with pkgs; [
+                    installShellFiles # required for `installShellCompletion` in postInstall hook
+                ];
+                postInstall = let
+                    melt = "${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} $out/bin/melt";
+                in pkgs.lib.optionalString (pkgs.stdenv.hostPlatform.emulatorAvailable pkgs.buildPackages) ''
+                    installShellCompletion --cmd melt \
+                        --bash <(COMPLETE=bash ${melt}) \
+                        --fish <(COMPLETE=fish ${melt}) \
+                        --zsh <(COMPLETE=zsh ${melt})
+                '';
+                src = ./.;
             };
         });
     };

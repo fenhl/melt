@@ -4,6 +4,7 @@ version = "2.3.0"
 authors = ["Fenhl <fenhl@fenhl.net>"]
 edition = "2024"
 repository = "https://github.com/fenhl/melt"
+rust-version = "1.95" # nixpkgs stable
 
 [profile.release]
 codegen-units = 1
@@ -25,6 +26,6 @@ chrono = { version = "0.4", default-features = false, features = ["std"] }
 clap = { version = "4", features = ["derive"] }
 is-terminal = "0.4"
 chrono-tz = "0.10"
-itertools = "0.14"
+itertools = "0.15"
 thiserror = "2"
 wheel = { git = "https://github.com/fenhl/wheel", default-features = false }
