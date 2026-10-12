@@ -20,7 +20,11 @@
                 installShellCompletion --cmd melt \
                     --bash <(COMPLETE=bash ${melt}) \
                     --fish <(COMPLETE=fish ${melt}) \
-                    --zsh <(COMPLETE=zsh ${melt})
+                    --zsh <(
+                        COMPLETE=zsh ${melt}
+                        # fix completion not working on first Tab press of shell session
+                        echo '_clap_dynamic_completer_melt'
+                    )
             '';
         };
     };
